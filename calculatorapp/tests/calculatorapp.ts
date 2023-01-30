@@ -26,4 +26,28 @@ describe("calculatorapp", () => {
     assert.ok(account.greeting === "hi");
     assert.ok(Number(account.result) === 0);
   });
+
+  it("Adding", async () => {
+    await program.methods
+      .add(new anchor.BN(2), new anchor.BN(2))
+      .accounts({
+        calculator: calculator.publicKey
+      })
+      .rpc();
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(Number(account.result) === 4);
+  });
+
+  it("Dividing", async () => {
+    await program.methods
+      .divide(new anchor.BN(3), new anchor.BN(2))
+      .accounts({
+        calculator: calculator.publicKey
+      })
+      .rpc();
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(Number(account.divideResult) === 1.5);
+  });
 });
